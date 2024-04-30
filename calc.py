@@ -18,7 +18,11 @@ def calculate_inheritance(total_assets, total_debts, will, medical_expenses, fun
             prediction = predict_inheritance(predictors, dt_model[prediction_key])
             inheritance_status[relationship] = prediction
 
-    return total_inheritance, inheritance_status
+    # Ambil nilai pembagian warisan
+    total_inheritance_share = calculate_inheritance_share(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, inheritance_status)
+    
+    return total_inheritance, inheritance_status, *total_inheritance_share
+
 
 def predict_inheritance(predictors, dt_model):
     model = dt_model['model']
@@ -44,6 +48,21 @@ def calculate_individual_inheritance(inheritance_status):
 def calculate_inheritance_share(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, dt_model):
     total_inheritance = total_assets - total_debts - will - medical_expenses - funeral_expenses
     inheritance_status = {}  # Inisialisasi dictionary untuk menyimpan status warisan
+
+    # Mengambil nilai atribut yang diperlukan untuk perhitungan
+    suami = family_members.get("total_suami", 0)
+    istri = family_members.get("total_istri", 0)
+    anak_laki = family_members.get("total_al", 0)
+    anak_perempuan = family_members.get("total_ap", 0)
+    cucu_laki = family_members.get("total_cl", 0)
+    cucu_perempuan = family_members.get("total_cp", 0)
+    ayah = family_members.get("total_ayah", 0)
+    ibu = family_members.get("total_ibu", 0)
+    kakek = family_members.get("total_kakek", 0)
+    nenek = family_members.get("total_nenek", 0)
+    saudara_seibu = family_members.get("total_si", 0)
+    saudara_laki_kandung = family_members.get("total_sdlk", 0)
+    saudara_perempuan_kandung = family_members.get("total_sdpk", 0)
 
     share_suami = 0
     share_istri = 0
