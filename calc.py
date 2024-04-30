@@ -3,21 +3,22 @@ import pickle
 def calculate_inheritance(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, dt_model):
     inheritance_status = {}
     total_inheritance = total_assets - total_debts - will - medical_expenses - funeral_expenses
-    
+
     for relationship, _ in family_members.items():
+        # Pastikan hubungan keluarga terdefinisi dalam model
         if relationship.startswith("total_"):
+            # Ubah hubungan keluarga menjadi yang diinginkan untuk mencocokkan model
             prediction_key = relationship.replace("total_", "hw_")
             if prediction_key not in dt_model:
                 print(f"Error: No model found for {prediction_key}")
                 continue
+            # Ambil nilai atribut yang mempengaruhi prediksi warisan
             predictors = [family_members[key] for key in family_members.keys() if key.startswith("total_")]
+            # Lakukan prediksi menggunakan model yang sesuai untuk setiap jenis anggota keluarga
             prediction = predict_inheritance(predictors, dt_model[prediction_key])
             inheritance_status[relationship] = prediction
 
-    # Menghitung bagian masing-masing ahli waris
-    share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_si, share_sdlk, share_sdpk = calculate_inheritance_share(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, inheritance_status)
-    
-    return total_inheritance, inheritance_status, share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_si, share_sdlk, share_sdpk
+    return total_inheritance, inheritance_status
 
 def predict_inheritance(predictors, dt_model):
     model = dt_model['model']
