@@ -1,3 +1,4 @@
+import pickle
 import calc
 
 def main():
@@ -17,12 +18,16 @@ def main():
 
     dt_model = calc.load_model("id3_without_pruning_model.pkl")
     
-    total_inheritance, inheritance_status, share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_si, share_sdlk, share_sdpk = calc.calculate_inheritance(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, dt_model)
+    total_inheritance, inheritance_status, share_ap, share_al, share_cl, share_cp, share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_si, share_sdlk, share_sdpk = calc.calculate_inheritance(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, dt_model)
 
     print("\nTotal harta waris yang dapat dibagikan:", total_inheritance)
     calc.print_inheritance_status(inheritance_status)
     print(f"Jumlah anggota keluarga yang dapat mewarisi: {calc.calculate_individual_inheritance(inheritance_status)}")
     print("Bagian masing-masing ahli waris:")
+    print(f"Share Anak Perempuan: {share_ap}")
+    print(f"Share Anak Laki-laki: {share_al}")
+    print(f"Share Cucu Laki-laki: {share_cl}")
+    print(f"Share Cucu Perempuan: {share_cp}")
     print(f"Share Suami: {share_suami}")
     print(f"Share Istri: {share_istri}")
     print(f"Share Ayah: {share_ayah}")
