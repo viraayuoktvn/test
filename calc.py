@@ -14,6 +14,7 @@ def calculate_inheritance(total_assets, total_debts, will, medical_expenses, fun
             prediction = predict_inheritance(predictors, dt_model[prediction_key])
             inheritance_status[relationship] = prediction
 
+    # Menghitung bagian masing-masing ahli waris
     share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_si, share_sdlk, share_sdpk = calculate_inheritance_share(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, inheritance_status)
     
     return total_inheritance, inheritance_status, share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_si, share_sdlk, share_sdpk
@@ -35,6 +36,7 @@ def load_model(filename):
     return models
 
 def calculate_individual_inheritance(inheritance_status):
+    # Menghitung bagian masing-masing anggota keluarga yang dapat mewarisi
     inheritance_count = sum([1 for status in inheritance_status.values() if status == 'DAPAT'])
     return inheritance_count
 
@@ -568,3 +570,7 @@ def calculate_inheritance_share(total_assets, total_debts, will, medical_expense
                     share_sdpk = 0
         
     return share_ap, share_al, share_cl , share_cp, share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_si, share_sdlk, share_sdpk
+
+def print_inheritance_status(inheritance_status):
+    for relationship, status in inheritance_status.items():
+        print(f"Status warisan untuk {relationship}: {status}")
